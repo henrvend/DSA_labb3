@@ -107,19 +107,30 @@ class AdjacencyList:
         '''
         self._edges = edges
         return self.get_head()
+    
 
     ###
     # Node operations
     ###
     def add_node(self, name, info=None):
         '''
-        Adds a new node named `name` in lexicographical order.  If node `name`
+        Adds a new node named `name` in lexicographical order. If node `name`
         is a member, its info-field is updated based on `info`.
 
         Returns an adjacency list head.
         '''
-        log.info("TODO: add_node()")
+
+        if(self.get_head().is_empty()):
+            self.__init__(name, info)
+        elif(self.get_name()<name):
+            self.cons(self.get_tail().add_node(name, info))
+        elif(self.get_name()>name):
+            return AdjacencyList(name, info).cons(self)
+        
+        
         return self.get_head()
+    
+
 
     def delete_node(self, name):
         '''
