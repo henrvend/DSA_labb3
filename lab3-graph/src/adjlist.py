@@ -155,6 +155,11 @@ class AdjacencyList:
         '''
         Returns the number of nodes.
         '''
+
+        if(self.get_tail().is_empty()):
+            return 1
+        else:
+            return self.get_tail().node_cardinality()+1
         log.info("TODO: node_cardinality()")
         return 0
 
