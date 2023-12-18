@@ -127,7 +127,6 @@ class AdjacencyList:
         elif(self.get_name()>name):
             return AdjacencyList(name, info).cons(self)
         
-        
         return self.get_head()
     
 
@@ -138,8 +137,16 @@ class AdjacencyList:
 
         Returns an adjacency list head.
         '''
-        log.info("TODO: delete_node()")
+
+        if self.find_node(name):
+
+            if(self.get_head().get_name()==name):
+                return self.get_tail()
+            else:
+                return self.cons(self.get_tail().delete_node(name))
+        
         return self.get_head()
+        
 
     def find_node(self, name):
         '''
@@ -155,13 +162,13 @@ class AdjacencyList:
         '''
         Returns the number of nodes.
         '''
-
+        if(self.get_head().is_empty()):
+            return 0
         if(self.get_tail().is_empty()):
             return 1
         else:
             return self.get_tail().node_cardinality()+1
-        log.info("TODO: node_cardinality()")
-        return 0
+        
 
     ###
     # Edge operations
@@ -187,8 +194,14 @@ class AdjacencyList:
 
         Pre: `dst` is a member of this adjacency list.
         '''
-        log.info("TODO: _add_edge()")
+
+        if(self.get_name()== src):
+            self.set_edges(self.get_edges().add(dst, weight))
+        else:
+            self.cons(self.get_tail()._add_edge(src, dst, weight))
+
         return self.get_head()
+        
 
     def delete_edge(self, src, dst):
         '''
@@ -267,7 +280,17 @@ class AdjacencyList:
         # In case you'd like to create an inf-initialized n x n matrix
         n = self.node_cardinality()
         matrix = [ [inf]*n for i in range(n) ]
-        log.info("TODO: adjacency_matrix()")
+
+        for i in range(len(self.list_nodes())):
+            for j in range(len(self.list_nodes())):
+                for edge in self.list_edges():
+                    src, dst, weight = edge
+                    if self.list_nodes()[i] == src and self.list_nodes()[j] == dst:
+                        matrix[i][j] = weight
+
+        
+        
+        #log.info("TODO: adjacency_matrix()")
         return matrix
 
     def list_nodes(self):
@@ -376,7 +399,15 @@ class Edge:
 
         Returns an edge head.
         '''
-        log.info("TODO: add()")
+
+        if(self.get_head().is_empty()):
+            self.__init__(dst, weight)
+        elif(self.get_head().get_dst()<dst):
+            self.cons(self.get_tail().add(dst, weight))
+        elif(self.get_head().get_dst()>dst):
+            return Edge(dst, weight).cons(self)
+        
+        #log.info("TODO: add()")
         return self.get_head()
 
     def delete(self, dst):
