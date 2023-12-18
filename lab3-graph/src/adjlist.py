@@ -209,6 +209,10 @@ class AdjacencyList:
 
         Returns an adjacency list head.
         '''
+        
+        if(self.get_name()== src and self.get_edges()==dst):
+            return self.cons(self, self.get_tail())
+        
         log.info("TODO: delete_edge()")
         return self.get_head()
 
@@ -225,15 +229,27 @@ class AdjacencyList:
         '''
         Returns True if there's an edge from node `src` to node `dst`.
         '''
-        log.info("TODO: find_edge()")
+
+        if(self.get_name()==src):
+            return self.get_edges().find(dst)
+        else:
+            return self.get_tail().find_edge(src, dst)    
+
         return False
 
     def edge_cardinality(self):
         '''
         Returns the number of edges.
         '''
-        log.info("TODO: edge_cardinality()")
+
+        if not self.is_empty():
+            current_node_cardinality = self.get_edges().cardinality()
+            rest_of_list_cardinality = self.get_tail().edge_cardinality()
+            total_cardinality = current_node_cardinality + rest_of_list_cardinality
+            return total_cardinality
+        
         return 0
+
 
     def self_loops(self):
         '''
@@ -288,9 +304,6 @@ class AdjacencyList:
                     if self.list_nodes()[i] == src and self.list_nodes()[j] == dst:
                         matrix[i][j] = weight
 
-        
-        
-        #log.info("TODO: adjacency_matrix()")
         return matrix
 
     def list_nodes(self):
@@ -407,7 +420,6 @@ class Edge:
         elif(self.get_head().get_dst()>dst):
             return Edge(dst, weight).cons(self)
         
-        #log.info("TODO: add()")
         return self.get_head()
 
     def delete(self, dst):
@@ -423,15 +435,24 @@ class Edge:
         '''
         Returns True if there is an edge towards `dst` in this sequence.
         '''
-        log.info("TODO: edge find()")
-        return False
+        if(self.is_empty()):
+            return False
+        if(self.get_dst()==dst):
+            return True
+        else:
+            return self.get_tail().find(dst)
+        
 
     def cardinality(self):
         '''
         Returns the number of edges in this sequence.
         '''
-        log.info("TODO: edge cardinality()")
-        return 0
+        if(self.get_head().is_empty()):
+            return 0
+        if(self.get_tail().is_empty()):
+            return 1
+        else:
+            return self.get_tail().cardinality()+1
 
     def list(self, src):
         '''
