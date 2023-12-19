@@ -225,9 +225,15 @@ class AdjacencyList:
 
         Returns an adjacency list head.
         '''
-        
+        #Något på spåret.
+        #Behöver man checka if self.is_empty() också? Fick det inte riktigt att fungera med den.
+        if not self.get_head().get_edges().is_empty():
+            self.get_head().get_edges().delete(name)
+            return self.cons(self.get_tail().delete_edges(name))
+        else:
+            return self.get_head()
+  
         log.info("TODO: delete_edges()")
-        return self.get_head()
 
     def find_edge(self, src, dst):
         '''
