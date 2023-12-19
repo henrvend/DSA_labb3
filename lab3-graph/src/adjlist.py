@@ -194,10 +194,10 @@ class AdjacencyList:
 
         Pre: `dst` is a member of this adjacency list.
         '''
-
+             
         if(self.get_name()== src):
             self.set_edges(self.get_edges().add(dst, weight))
-        else:
+        elif(not self.get_tail().is_empty()):
             self.cons(self.get_tail()._add_edge(src, dst, weight))
 
         return self.get_head()
@@ -210,10 +210,13 @@ class AdjacencyList:
         Returns an adjacency list head.
         '''
         
-        if(self.get_name()== src and self.get_edges()==dst):
-            return self.cons(self, self.get_tail())
-        
-        log.info("TODO: delete_edge()")
+        if(self.find_edge(src, dst)):
+            if(self.get_name()== src):
+                return self.set_edges(self.get_edges().delete(dst))
+            else:
+                self.get_tail().delete_edge(src, dst)        
+               
+        #log.info("TODO: delete_edge()")
         return self.get_head()
 
     def delete_edges(self, name):
@@ -229,10 +232,11 @@ class AdjacencyList:
         '''
         Returns True if there's an edge from node `src` to node `dst`.
         '''
-
+        if(self.is_empty()):
+            return False
         if(self.get_name()==src):
             return self.get_edges().find(dst)
-        else:
+        elif(not self.get_tail().is_empty()):
             return self.get_tail().find_edge(src, dst)    
 
         return False
@@ -256,6 +260,8 @@ class AdjacencyList:
         Returns the number of loops in this adjacency list.  Note that a loop is
         defined as a node that has an edge towards itself, e.g., A->A.
         '''
+
+
         log.info("TODO: self_loops()")
         return 0
 
@@ -384,7 +390,7 @@ class Edge:
         self._tail = tail
         return self.get_head()
 
-    def set_dst(self, dst):
+    def _dst(self, dst):
         '''
         Sets the destination of this edge to `dst`.
 
@@ -419,6 +425,8 @@ class Edge:
             self.cons(self.get_tail().add(dst, weight))
         elif(self.get_head().get_dst()>dst):
             return Edge(dst, weight).cons(self)
+        elif(self.get_dst()==dst):
+            self.set_weight(weight)
         
         return self.get_head()
 
@@ -428,7 +436,13 @@ class Edge:
 
         Returns an edge head.
         '''
-        log.info("TODO: delete()")
+
+        if(self.get_dst()==dst):
+            return self.get_tail()
+        else:
+            return self.cons(self.get_tail().delete(dst))
+
+        #log.info("TODO: delete()")
         return self.get_head()
 
     def find(self, dst):
