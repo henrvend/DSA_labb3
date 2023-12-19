@@ -225,6 +225,7 @@ class AdjacencyList:
 
         Returns an adjacency list head.
         '''
+        
         log.info("TODO: delete_edges()")
         return self.get_head()
 
