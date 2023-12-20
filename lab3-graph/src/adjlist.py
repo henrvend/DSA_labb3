@@ -227,13 +227,18 @@ class AdjacencyList:
         '''
         #Något på spåret.
         #Behöver man checka if self.is_empty() också? Fick det inte riktigt att fungera med den.
-        if not self.get_head().get_edges().is_empty():
-            self.get_head().get_edges().delete(name)
-            return self.cons(self.get_tail().delete_edges(name))
-        else:
+        #Henrik la till self.is_empty() och self.set_edges(), kollade self.is_empty i delete också 
+
+        if self.is_empty():
             return self.get_head()
+        
+        if not self.get_head().get_edges().is_empty():
+            self.set_edges(self.get_edges().delete(name))
+            return self.cons(self.get_tail().delete_edges(name))
+        
+        return self.get_head()
   
-        log.info("TODO: delete_edges()")
+        #log.info("TODO: delete_edges()")
 
     def find_edge(self, src, dst):
         '''
@@ -443,7 +448,8 @@ class Edge:
 
         Returns an edge head.
         '''
-
+        if self.is_empty():
+            return self.get_head()
         if(self.get_dst()==dst):
             return self.get_tail()
         else:
