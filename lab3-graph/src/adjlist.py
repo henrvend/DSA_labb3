@@ -273,9 +273,15 @@ class AdjacencyList:
         defined as a node that has an edge towards itself, e.g., A->A.
         '''
 
+        loops = 0
 
-        log.info("TODO: self_loops()")
-        return 0
+        for edge in self.list_edges():
+            src, dst, weight = edge
+            if src == dst:
+                loops += 1
+
+        #log.info("TODO: self_loops()")
+        return loops
 
     def adjacency_matrix(self):
         '''
