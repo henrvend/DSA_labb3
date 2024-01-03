@@ -17,8 +17,31 @@ def warshall(adjlist):
 
     Pre: adjlist is not empty.
     '''
+    
+    num_nodes = adjlist.node_cardinality()
+
+    paths = [[False for _ in range(num_nodes)] for _ in range(num_nodes)]
+
+    for i in range(num_nodes):
+        for j in range(num_nodes):
+            if adjlist.adjacency_matrix()[i][j] != inf:
+                paths[i][j] = True
+            
+
+    for k in range(num_nodes):
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                through_k = paths[i][k] and paths[k][j]
+                paths[i][j] = paths[i][j] or through_k
+
+
+
+    return paths
+
     log.info("TODO: warshall()")
     return [[]]
+
+
 
 def floyd(adjlist):
     '''
@@ -29,8 +52,32 @@ def floyd(adjlist):
 
     Pre: adjlist is not empty.
     '''
-    log.info("TODO: floyd()")
-    return [[]]
+    #inf = float('inf')
+    num_nodes = adjlist.node_cardinality()
+
+    paths = [[inf for _ in range(num_nodes)] for _ in range(num_nodes)]
+
+    for i in range(num_nodes):
+        for j in range(num_nodes):
+            if i == j:
+                paths[i][j] = 0
+            else:
+                paths[i][j] = adjlist.adjacency_matrix()[i][j]
+                
+
+    for k in range(num_nodes):
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                through_k = paths[i][k] + paths[k][j]
+                paths[i][j] = min(paths[i][j], through_k)
+
+    return paths
+
+def min(a, b):
+    if a<b:
+        return a
+    else:
+        return b
 
 def dijkstra(adjlist, start_node):
     '''
