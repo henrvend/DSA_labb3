@@ -135,10 +135,58 @@ def prim(adjlist, start_node):
     l: [ None, 1, 1]
     c: [ None, 'a', 'b' ]
     '''
-    log.info("TODO: prim()")
-    l = []
-    c = []
+     
+    num_nodes = adjlist.node_cardinality()
+
+
+    l = [inf] * num_nodes
+    c = [None] * num_nodes
+    visited = [False] * num_nodes
+    N = adjlist.list_nodes()
+    Q = adjlist.list_edges()
+    '''Q = [(u, v, weight, False) for u, v, weight in adjlist.list_edges()]'''
+    l[0] = None
+    c[0] = None
+
+    for i, element in enumerate(N):
+        if N[i] == start_node:
+            visited[i]=True
+    
+    while Q:
+        # Extrahera den minimala kanten från Q startnod
+        
+        min_weight = extract_min(Q, visited, N)
+        
+            
+
+
     return l, c
+
+def extract_min(Q, visited, N):
+    minimum = inf
+    key = 0
+
+    for i, element in enumerate(Q):
+        for j, element in enumerate(N):
+            if (N[j] == Q[i][0] or N[j] == Q[i][1]) and visited[j]==True:
+                index =  Q[i][1]
+                if  minimum > Q[i][2]:
+                    minimum = Q[i][2]
+                    key = i
+                    if Q[i][0] == N[j]:
+                        for k in range(N):
+                            if Q[i][1]==N[j]:
+                                visited[j]=True
+                    else:
+                        for k in range(N):
+                            if Q[i][0]==N[j]:
+                                visited[j]=True         
+                    
+    Q.pop(key)
+    visited[key] = True
+    return minimum
+
+
 
 if __name__ == "__main__":
     logging.critical("module contains no main")
