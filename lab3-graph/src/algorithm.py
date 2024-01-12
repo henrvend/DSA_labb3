@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+#Adam Brattström
+#Henrik Vendel
 
 import sys
 import logging
@@ -104,10 +106,53 @@ def dijkstra(adjlist, start_node):
     d: [ None, 1, 3]
     e: [ None, 'a', 'b' ]
     '''
-    log.info("TODO: dijkstra()")
-    d = []
-    e = []
+
+    num_nodes = adjlist.node_cardinality()
+    dist = [inf] * num_nodes
+    N = adjlist.list_nodes()
+    Q = adjlist.list_edges()
+    d=[inf]*num_nodes
+    e=[None]*num_nodes
+ 
+    
+
+    for i, element in enumerate(N):
+        if N[i] == start_node:
+            dist[i] = 0
+            d[i] = None
+
+    
+    sptSet = [False] * num_nodes
+
+    for cout in range(num_nodes):
+
+            u = minDistance(dist, sptSet, num_nodes)
+
+            sptSet[u] = True
+
+            for v in range(num_nodes):
+                if (adjlist.adjacency_matrix()[u][v] > 0 and
+                   sptSet[v] == False and
+                   dist[v] > dist[u] + adjlist.adjacency_matrix()[u][v]):
+                    dist[v] = dist[u] + adjlist.adjacency_matrix()[u][v]
+                    d[v]=dist[v]
+                    e[v]=Q[0][0]
+                                            
+ 
+
+    
     return d, e
+
+def minDistance(dist, sptSet,num_nodes):
+ 
+        min = inf
+ 
+        for v in range(num_nodes):
+            if dist[v] < min and sptSet[v] == False:
+                min = dist[v]
+                min_index = v
+ 
+        return min_index
 
 def prim(adjlist, start_node):
     '''
@@ -144,7 +189,6 @@ def prim(adjlist, start_node):
     visited = [False] * num_nodes
     N = adjlist.list_nodes()
     Q = adjlist.list_edges()
-    '''Q = [(u, v, weight, False) for u, v, weight in adjlist.list_edges()]'''
     l[0] = None
     c[0] = None
 
@@ -155,14 +199,14 @@ def prim(adjlist, start_node):
     while Q:
         # Extrahera den minimala kanten från Q startnod
         
-        min_weight = extract_min(Q, visited, N)
+        min_weight = extract_min_prim(Q, visited, N)
         
             
 
 
     return l, c
 
-def extract_min(Q, visited, N):
+def extract_min_prim(Q, visited, N):
     minimum = inf
     key = 0
 
@@ -173,17 +217,10 @@ def extract_min(Q, visited, N):
                 if  minimum > Q[i][2]:
                     minimum = Q[i][2]
                     key = i
-                    if Q[i][0] == N[j]:
-                        for k in range(N):
-                            if Q[i][1]==N[j]:
-                                visited[j]=True
-                    else:
-                        for k in range(N):
-                            if Q[i][0]==N[j]:
-                                visited[j]=True         
+                           
                     
     Q.pop(key)
-    visited[key] = True
+
     return minimum
 
 

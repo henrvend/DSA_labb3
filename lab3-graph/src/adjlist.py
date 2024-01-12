@@ -8,6 +8,10 @@
 # 3) AdjacencyList.find_edge, Edge.find
 #
 
+#Adam Brattström
+#Henrik Vendel
+
+
 import sys
 import logging
 
